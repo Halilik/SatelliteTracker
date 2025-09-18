@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "SatelliteTracker"
 include(":app")
- 
+include(":core:designsystem")
+include(":feature:splash")
