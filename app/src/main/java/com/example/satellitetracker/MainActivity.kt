@@ -10,6 +10,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.home.navigation.homeScreen
+import com.example.home.navigation.navigateToHome
 import com.example.splash.navigation.SplashRoute
 import com.example.splash.navigation.splashScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,8 +30,12 @@ class MainActivity : ComponentActivity() {
                         startDestination = SplashRoute
                     ) {
                         splashScreen(
-                            // navigateToHome = navController::navigateToHome
+                            navigateToHome = navController::navigateToHome
                         )
+                        homeScreen(
+                            // navigateToCategory = navController::navigateToCategory
+                        )
+
                     }
                 }
             }

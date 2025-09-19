@@ -44,6 +44,7 @@ android {
 
 dependencies {
     implementation(project(":feature:splash"))
+    implementation(project(":feature:home"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

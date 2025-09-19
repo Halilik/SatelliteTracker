@@ -23,3 +23,7 @@ rootProject.name = "SatelliteTracker"
 include(":app")
 include(":core:designsystem")
 include(":feature:splash")
+include(":feature:home")
+include(":core:data")
+include(":core:model")
+include(":core:network")

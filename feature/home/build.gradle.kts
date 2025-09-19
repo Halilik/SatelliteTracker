@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.splash"
+    namespace = "com.example.home"
     compileSdk = 36
 
     defaultConfig {
@@ -37,7 +37,10 @@ android {
 }
 
 dependencies {
+
     implementation(project(":core:designsystem"))
+    implementation(project(":core:model"))
+    implementation(project(":core:data"))
 
     //Navigation Compose
     implementation(libs.androidx.navigation.compose)
@@ -46,7 +49,6 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -59,4 +61,11 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:6.0.0")
+    testImplementation("app.cash.turbine:turbine:1.2.1")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation(libs.androidx.junit)
+    testImplementation(libs.junit)
 }
