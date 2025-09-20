@@ -34,8 +34,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -78,6 +81,7 @@ internal fun HomeScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .semantics { testTagsAsResourceId = true }
             .background(color = White)
     ) {
         Column {
@@ -89,7 +93,7 @@ internal fun HomeScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(modifier = Modifier.testTag(HomeComponentKey.CIRCULAR_PROGRESS_INDICATOR))
                     }
                 }
 
@@ -118,7 +122,11 @@ private fun SatelliteListView(
         contentAlignment = Alignment.TopCenter
     ) {
         satellitesState.data.let {
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(HomeComponentKey.LAZY_COLUMN)
+            ) {
                 itemsIndexed(
                     items = it,
                     key = { index, _ -> index }
@@ -153,19 +161,20 @@ private fun SearchBar(
     searchText: String,
     onQueryChange: (String) -> Unit
 ) {
-    var searchText1 = searchText
+    val searchTextLocal = remember { mutableStateOf("") }
     SearchBar(
         modifier = Modifier
             .fillMaxWidth()
+            .testTag(HomeComponentKey.SEARCH_BAR)
             .padding(
                 horizontal = if (expanded) Dimens.paddingZero else Dimens.paddingNormal,
                 vertical = Dimens.paddingSmaller
             ),
         inputField = {
             InputField(
-                query = searchText1,
+                query = searchTextLocal.value,
                 onQueryChange = {
-                    searchText1 = it
+                    searchTextLocal.value = it
                     onQueryChange(it)
                 },
                 onSearch = {

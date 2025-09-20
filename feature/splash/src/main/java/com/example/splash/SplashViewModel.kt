@@ -22,15 +22,15 @@ class SplashViewModel @Inject constructor() : ViewModel() {
 
     private fun fetchHomeData() {
         viewModelScope.launch {
-            _uiState.value = SplashUiState(isLoading = false)
-            delay(2000)
             _uiState.value = SplashUiState(isLoading = true)
+            delay(2000)
+            _uiState.value = SplashUiState(isLoading = false)
         }
     }
 
 }
 
 data class SplashUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val error: String? = null
 )

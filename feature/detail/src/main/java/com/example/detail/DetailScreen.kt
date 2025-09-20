@@ -14,7 +14,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -34,7 +38,7 @@ internal fun DetailScreenRoot(
 
     LaunchedEffect(satelliteId) {
         viewModel.setSatelliteName(satelliteName)
-        viewModel.getSatellitesDetail(satelliteId,satelliteName)
+        viewModel.getSatellitesDetail(satelliteId, satelliteName)
         viewModel.getSatellitesPosition(satelliteId)
     }
     val satelliteDetailState by viewModel.satelliteDetailState.collectAsStateWithLifecycle()
@@ -48,62 +52,70 @@ internal fun DetailScreenRoot(
 internal fun DetailScreen(
     satellitesDetailState: SatellitesDetailState, satellitesPosition: PositionsDataModel
 ) {
-
-    when (satellitesDetailState) {
-        SatellitesDetailState.Loading -> {
-            Box(
-                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        }
-
-        is SatellitesDetailState.Error -> Unit
-
-        is SatellitesDetailState.Success -> {
-            satellitesDetailState.data.let { satellite ->
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .semantics { testTagsAsResourceId = true }) {
+        when (satellitesDetailState) {
+            SatellitesDetailState.Loading -> {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(White),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
-                    Column {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = Dimens.paddingNormal),
-                            text = satellite.name.toString(),
-                            style = Typography.titleLarge,
-                            textAlign = TextAlign.Center
+                    CircularProgressIndicator(
+                        modifier = Modifier.testTag(
+                            DetailComponentKey.CIRCULAR_PROGRESS_INDICATOR
                         )
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = Dimens.paddingExtraLarge),
-                            text = satellite.firstFlight.toString().dateFormat(),
-                            style = Typography.bodyMedium,
-                            textAlign = TextAlign.Center
-                        )
-                        InfoElement(
-                            stringResource(R.string.height_mass),
-                            "${satellite.height}/${satellite.mass}"
-                        )
-                        InfoElement(
-                            stringResource(R.string.cost),
-                            satellite.costPerLaunch.toString()
-                        )
-                        InfoElement(
-                            stringResource(R.string.lastposition),
-                            "(${satellitesPosition.posX},${satellitesPosition.posY})"
-                        )
+                    )
+                }
+            }
 
+            is SatellitesDetailState.Error -> Unit
 
+            is SatellitesDetailState.Success -> {
+                satellitesDetailState.data.let { satellite ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column {
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .testTag(DetailComponentKey.SATELLITE_NAME)
+                                    .padding(bottom = Dimens.paddingNormal),
+                                text = satellite.name.toString(),
+                                style = Typography.titleLarge,
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .testTag(DetailComponentKey.FIRST_FLIGHT)
+                                    .padding(bottom = Dimens.paddingExtraLarge),
+                                text = satellite.firstFlight.toString().dateFormat(),
+                                style = Typography.bodyMedium,
+                                textAlign = TextAlign.Center
+                            )
+                            InfoElement(
+                                stringResource(R.string.heightMass),
+                                "${satellite.height}/${satellite.mass}"
+                            )
+                            InfoElement(
+                                stringResource(R.string.cost), satellite.costPerLaunch.toString()
+                            )
+                            InfoElement(
+                                stringResource(R.string.lastPosition),
+                                "(${satellitesPosition.posX},${satellitesPosition.posY})"
+                            )
+                        }
                     }
                 }
             }
         }
     }
+
 }
 
 @Composable
@@ -116,13 +128,11 @@ private fun InfoElement(title: String, text: String) {
     ) {
         Row {
             Text(
-                text = title,
-                style = Typography.titleMedium,
-                textAlign = TextAlign.Center
+               modifier = Modifier.testTag(title), text = title, style = Typography.titleMedium, textAlign = TextAlign.Center
             )
             Text(
                 text = text.formatNumber(),
-                style =Typography.bodyMedium,
+                style = Typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
         }

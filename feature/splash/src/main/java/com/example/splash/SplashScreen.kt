@@ -11,7 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.Dimens
 import com.example.designsystem.SatelliteTrackerTheme
@@ -20,29 +23,43 @@ import com.example.designsystem.White
 
 
 @Composable
-internal fun SplashScreen(
+internal fun SplashScreenRoot(
     navigateToHome: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
 
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    SplashScreen(
+        navigateToHome,
+        uiState
+    )
 
+}
+
+@Composable
+fun SplashScreen(
+    navigateToHome: () -> Unit,
+    uiState: SplashUiState
+) {
     when (uiState.isLoading) {
-        true -> {
+        false -> {
             navigateToHome.invoke()
         }
 
-        false -> {}
+        true -> {}
     }
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .semantics { testTagsAsResourceId = true }
             .background(White)
     ) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Image(
-                modifier = Modifier.size(Dimens.sizeLargest),
+                modifier = Modifier
+                    .size(Dimens.sizeLargest)
+                    .testTag(SplashComponentKey.SPLASH_ICON),
                 painter = painterResource(id = R.drawable.satellite),
                 contentDescription = null
             )
@@ -54,8 +71,8 @@ internal fun SplashScreen(
 
 @Preview
 @Composable
-internal fun GreetingPreview() {
+internal fun SplashScreenPreview() {
     SatelliteTrackerTheme {
-        SplashScreen({})
+        SplashScreen({}, SplashUiState(isLoading = false))
     }
 }

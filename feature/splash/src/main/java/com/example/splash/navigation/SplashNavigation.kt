@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.example.splash.SplashScreen
+import com.example.splash.SplashScreenRoot
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,7 +19,7 @@ fun NavGraphBuilder.splashScreen(
 ) {
 
     composable<SplashRoute> {
-        SplashScreen(
+        SplashScreenRoot(
             navigateToHome
         )
     }
