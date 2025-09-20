@@ -27,7 +27,6 @@ class HomeScreenViewModel @Inject constructor(
     val satellitesState: StateFlow<SatellitesState> = _satellitesState.asStateFlow()
 
     private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     init {
         getSatellites()
