@@ -34,7 +34,7 @@ internal fun DetailScreenRoot(
 
     LaunchedEffect(satelliteId) {
         viewModel.setSatelliteName(satelliteName)
-        viewModel.getSatellitesDetail(satelliteId)
+        viewModel.getSatellitesDetail(satelliteId,satelliteName)
         viewModel.getSatellitesPosition(satelliteId)
     }
     val satelliteDetailState by viewModel.satelliteDetailState.collectAsStateWithLifecycle()

@@ -27,6 +27,7 @@ class HomeScreenViewModel @Inject constructor(
     val satellitesState: StateFlow<SatellitesState> = _satellitesState.asStateFlow()
 
     private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     init {
         getSatellites()
@@ -36,7 +37,7 @@ class HomeScreenViewModel @Inject constructor(
 
     fun getSatellites() {
         viewModelScope.launch {
-            delay(1000L)
+            //  delay(1000L)
             satellitesRepository.getSatellites().let { satellites ->
                 _satellitesState.value = SatellitesState.Success(satellites)
                 allSatelliteList = satellites.toMutableList()
