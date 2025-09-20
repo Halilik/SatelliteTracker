@@ -7,4 +7,7 @@ class SatellitesLocalDataSourceImpl @Inject constructor(
 ) : SatellitesLocalDataSource {
     override suspend fun getSatelliteDetailFromId(id: Int): SatelliteDetail? =
         satelliteDetailDao.getSatelliteDetailFromId(id)
+
+    override suspend fun insertSatelliteDetail(satelliteDetail: SatelliteDetail) =
+        satelliteDetailDao.insertSatelliteDetail(satelliteDetail)
 }

@@ -2,8 +2,7 @@ package com.example.data.di
 
 import com.example.data.repository.SatellitesRepository
 import com.example.data.repository.SatellitesRepositoryImpl
-import com.example.database.SatelliteDatabase
-import com.example.database.SatelliteDetailDao
+import com.example.database.SatellitesLocalDataSource
 import com.example.network.datasource.SatellitesRemoteDataSource
 import dagger.Module
 import dagger.Provides
@@ -16,8 +15,8 @@ object RepositoryModule {
     @Provides
     fun provideSatellitesRepository(
         satellitesRemoteDataSource: SatellitesRemoteDataSource,
-        satelliteDetailDao: SatelliteDetailDao
+        satellitesLocalDataSource: SatellitesLocalDataSource
     ): SatellitesRepository {
-        return SatellitesRepositoryImpl(satellitesRemoteDataSource, satelliteDetailDao)
+        return SatellitesRepositoryImpl(satellitesRemoteDataSource, satellitesLocalDataSource)
     }
 }
