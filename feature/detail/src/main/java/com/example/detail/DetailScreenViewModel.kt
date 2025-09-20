@@ -37,8 +37,8 @@ class DetailScreenViewModel @Inject constructor(
             satellitesRepository.getSatellitesDetails().let { satellites ->
                 satellites.firstOrNull { it.id == id }?.let { satelliteDetail ->
                     satelliteDetail.name = satelliteName.apply {
-                        _satelliteDetailState.value =
-                            SatellitesDetailState.Success(satelliteDetail)
+                        _satelliteDetailState.emit(SatellitesDetailState.Success(satelliteDetail))
+
                     }
                 }
 
@@ -55,8 +55,7 @@ class DetailScreenViewModel @Inject constructor(
                     ?.let { satellitePosition ->
                         satellitePosition.positions?.forEach { satellitePositionModel ->
                             satellitePositionModel?.let {
-                                _satellitePositionState.value =
-                                    it
+                                _satellitePositionState.emit(it)
                                 delay(3000L)
                             }
                         }

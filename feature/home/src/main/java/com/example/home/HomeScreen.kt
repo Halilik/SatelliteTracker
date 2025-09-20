@@ -35,16 +35,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.Black
+import com.example.designsystem.Dimens
 import com.example.designsystem.Grey
 import com.example.designsystem.SatelliteTrackerTheme
 import com.example.model.SatellitesModel
 import com.example.designsystem.R
 import com.example.designsystem.White
+import com.example.home.R.*
 
 @Composable
 internal fun HomeScreenRoot(
@@ -78,39 +81,7 @@ internal fun HomeScreen(
             .background(color = White)
     ) {
         Column {
-            SearchBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = if (expanded) 0.dp else 16.dp,
-                        vertical = 8.dp
-                    ),
-                inputField = {
-                    InputField(
-                        query = searchText,
-                        onQueryChange = {
-                            searchText = it
-                            onQueryChange(it)
-                        },
-                        onSearch = {
-
-                        },
-                        expanded = false,
-                        onExpandedChange = {
-                        },
-                        placeholder = { Text("Search Satellites") },
-                        leadingIcon = {
-                            Icon(
-                                Icons.Filled.Search,
-                                contentDescription = "Search Icon"
-                            )
-                        })
-                },
-                expanded = false,
-                onExpandedChange = { }
-            ) {
-
-            }
+            SearchBar(expanded, searchText, onQueryChange)
 
             when (satellitesState) {
                 SatellitesState.Loading -> {
@@ -123,39 +94,7 @@ internal fun HomeScreen(
                 }
 
                 is SatellitesState.Success -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 20.dp),
-                        contentAlignment = Alignment.TopCenter
-                    ) {
-                        satellitesState.data.let {
-                            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                                itemsIndexed(
-                                    items = it,
-                                    key = { index, _ -> index }
-                                ) { index, satelliteInfo ->
-                                    Column() {
-                                        SatelliteElement(
-                                            navigateToDetail = navigateToDetail,
-                                            satelliteInfo = satelliteInfo
-                                        )
-                                        if (index != it.lastIndex) {
-                                            HorizontalDivider(
-                                                modifier = Modifier.padding(
-                                                    horizontal = 24.dp,
-                                                    vertical = 10.dp
-                                                ),
-                                                thickness = 1.dp,
-                                                color = Color.LightGray
-                                            )
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    SatelliteListView(satellitesState, navigateToDetail)
                 }
 
 
@@ -167,6 +106,89 @@ internal fun HomeScreen(
 
 }
 
+@Composable
+private fun SatelliteListView(
+    satellitesState: SatellitesState.Success,
+    navigateToDetail: (Int, String) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = Dimens.paddingLarger),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        satellitesState.data.let {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                itemsIndexed(
+                    items = it,
+                    key = { index, _ -> index }
+                ) { index, satelliteInfo ->
+                    Column() {
+                        SatelliteElement(
+                            navigateToDetail = navigateToDetail,
+                            satelliteInfo = satelliteInfo
+                        )
+                        if (index != it.lastIndex) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(
+                                    horizontal = Dimens.paddingLargest,
+                                    vertical = Dimens.paddingSmall
+                                ),
+                                thickness = Dimens.thicknessSmall,
+                                color = Color.LightGray
+                            )
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun SearchBar(
+    expanded: Boolean,
+    searchText: String,
+    onQueryChange: (String) -> Unit
+) {
+    var searchText1 = searchText
+    SearchBar(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = if (expanded) Dimens.paddingZero else Dimens.paddingNormal,
+                vertical = Dimens.paddingSmaller
+            ),
+        inputField = {
+            InputField(
+                query = searchText1,
+                onQueryChange = {
+                    searchText1 = it
+                    onQueryChange(it)
+                },
+                onSearch = {
+
+                },
+                expanded = false,
+                onExpandedChange = {
+                },
+                placeholder = { Text(stringResource(string.search_satellites)) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Search,
+                        contentDescription = stringResource(string.search_icon)
+                    )
+                })
+        },
+        expanded = false,
+        onExpandedChange = { }
+    ) {
+
+    }
+}
+
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun SatelliteElement(
@@ -176,7 +198,7 @@ fun SatelliteElement(
 
     val configuration = LocalConfiguration.current
     val startPadding = remember(configuration.screenWidthDp) {
-        val itemSize = 100.dp
+        val itemSize = Dimens.sizeLarge
         (configuration.screenWidthDp.dp - itemSize) / 2
     }
 
@@ -189,7 +211,7 @@ fun SatelliteElement(
     ) {
         Image(
             modifier = Modifier
-                .size(15.dp),
+                .size(Dimens.sizeSmaller),
             painter = if (satelliteInfo.active == true)
                 painterResource(id = R.drawable.greencircle)
             else painterResource(
@@ -197,10 +219,10 @@ fun SatelliteElement(
             ),
             contentDescription = null
         )
-        Spacer(modifier = Modifier.width(20.dp))
+        Spacer(modifier = Modifier.width(Dimens.sizeSmall))
         Column {
             Text(
-                modifier = Modifier.padding(bottom = 4.dp),
+                modifier = Modifier.padding(bottom = Dimens.paddingSmallest),
                 color = setSatelliteTextColor(satelliteInfo.active.toString()),
                 text = satelliteInfo.name.orEmpty()
             )
@@ -220,9 +242,9 @@ fun setSatelliteTextColor(active: String): Color {
 }
 
 fun setSatelliteActivity(active: String): String {
-    return if (active == "true")
+    return if (active == "true") {
         "Active"
-    else
+    } else
         "Passive"
 }
 

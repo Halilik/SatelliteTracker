@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.designsystem.Dimens
 import com.example.designsystem.SatelliteTrackerTheme
 import com.example.designsystem.R
 import com.example.designsystem.White
@@ -43,7 +44,7 @@ internal fun SplashScreen(
     ) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Image(
-                modifier = Modifier.size(200.dp),
+                modifier = Modifier.size(Dimens.sizeLargest),
                 painter = painterResource(id = R.drawable.satellite),
                 contentDescription = null
             )

@@ -1,6 +1,5 @@
 package com.example.detail
 
-import android.icu.text.NumberFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,28 +8,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.designsystem.BoldFont
-import com.example.designsystem.RegularFont
+import com.example.designsystem.Dimens
 import com.example.designsystem.SatelliteTrackerTheme
-import com.example.designsystem.SemiBoldFont
+import com.example.designsystem.Typography
 import com.example.designsystem.White
 import com.example.model.PositionsDataModel
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Locale.GERMANY
+import com.example.ui.dateFormat
+import com.example.ui.formatNumber
 
 @Composable
 internal fun DetailScreenRoot(
@@ -78,25 +73,29 @@ internal fun DetailScreen(
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 16.dp),
+                                .padding(bottom = Dimens.paddingNormal),
                             text = satellite.name.toString(),
-                            fontFamily = BoldFont,
-                            fontSize = 28.sp,
-                            textAlign = TextAlign.Center,
+                            style = Typography.titleLarge,
+                            textAlign = TextAlign.Center
                         )
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 40.dp),
+                                .padding(bottom = Dimens.paddingExtraLarge),
                             text = satellite.firstFlight.toString().dateFormat(),
-                            fontFamily = RegularFont,
-                            fontSize = 18.sp,
+                            style = Typography.bodyMedium,
                             textAlign = TextAlign.Center
                         )
-                        InfoElement("Height/Mass: ", "${satellite.height}/${satellite.mass}")
-                        InfoElement("Cost:", satellite.costPerLaunch.toString())
                         InfoElement(
-                            "LastPosition: ",
+                            stringResource(R.string.height_mass),
+                            "${satellite.height}/${satellite.mass}"
+                        )
+                        InfoElement(
+                            stringResource(R.string.cost),
+                            satellite.costPerLaunch.toString()
+                        )
+                        InfoElement(
+                            stringResource(R.string.lastposition),
                             "(${satellitesPosition.posX},${satellitesPosition.posY})"
                         )
 
@@ -113,41 +112,21 @@ private fun InfoElement(title: String, text: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 24.dp),
+            .padding(bottom = Dimens.paddingLargest),
         contentAlignment = Alignment.Center
     ) {
         Row {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium,
+                style = Typography.titleMedium,
+                textAlign = TextAlign.Center
             )
             Text(
                 text = text.formatNumber(),
-                fontFamily = RegularFont,
-                fontSize = 18.sp,
+                style =Typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
         }
-    }
-}
-
-fun String.dateFormat(): String {
-    val dateString = "2021-12-01"
-    val inputFormatter = DateTimeFormatter.ISO_LOCAL_DATE
-    val outputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-    val date = LocalDate.parse(dateString, inputFormatter)
-    val formattedDate = date.format(outputFormatter)
-    return formattedDate
-}
-
-fun String.formatNumber(): String {
-    return try {
-        val number = this.toLong()
-        val numberFormat = NumberFormat.getNumberInstance(GERMANY)
-        numberFormat.format(number)
-    } catch (e: NumberFormatException) {
-        this
     }
 }
 
