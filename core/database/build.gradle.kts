@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.data"
+    namespace = "com.example.database"
     compileSdk = 36
 
     defaultConfig {
@@ -35,10 +35,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:model"))
-    implementation(project(":core:network"))
-    implementation(project(":core:database"))
+    val room_version = "2.8.0"
 
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:${room_version}")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

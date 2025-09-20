@@ -14,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
 object DataSourceModule {
 
     @Provides
-    fun provideSatellitesRepository(@ApplicationContext context: Context): SatellitesRemoteDataSource {
+    fun provideSatellitesDataSource(@ApplicationContext context: Context): SatellitesRemoteDataSource {
         return SatellitesRemoteDataSourceImpl(context)
     }
 }

@@ -31,10 +31,9 @@ import com.example.ui.formatNumber
 internal fun DetailScreenRoot(
     satelliteId: Int, satelliteName: String, viewModel: DetailScreenViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(satelliteName) {
-        viewModel.setSatelliteName(satelliteName)
-    }
+
     LaunchedEffect(satelliteId) {
+        viewModel.setSatelliteName(satelliteName)
         viewModel.getSatellitesDetail(satelliteId)
         viewModel.getSatellitesPosition(satelliteId)
     }

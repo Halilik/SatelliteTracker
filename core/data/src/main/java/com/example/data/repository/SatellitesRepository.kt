@@ -8,7 +8,7 @@ interface SatellitesRepository {
 
     suspend fun getSatellites(): List<SatellitesModel>
 
-    suspend fun getSatellitesDetails(): List<SatellitesDetailModel>
+    suspend fun getSatellitesDetails(id: Int, name: String): SatellitesDetailModel?
 
     suspend fun getSatellitesPositions(): PositionsResponseModel
 

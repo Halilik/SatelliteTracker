@@ -34,17 +34,10 @@ class DetailScreenViewModel @Inject constructor(
     fun getSatellitesDetail(id: Int) {
         viewModelScope.launch {
             delay(1000L)
-            satellitesRepository.getSatellitesDetails().let { satellites ->
-                satellites.firstOrNull { it.id == id }?.let { satelliteDetail ->
-                    satelliteDetail.name = satelliteName.apply {
-                        _satelliteDetailState.emit(SatellitesDetailState.Success(satelliteDetail))
-
-                    }
-                }
-
+            satellitesRepository.getSatellitesDetails(id, satelliteName).let { satellite ->
+                satellite?.let { _satelliteDetailState.emit(SatellitesDetailState.Success(it)) }
             }
         }
-
     }
 
     fun getSatellitesPosition(id: Int) {

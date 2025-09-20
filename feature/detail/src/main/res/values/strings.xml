@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="height_mass">"Height/Mass: "</string>
-    <string name="cost">Cost:</string>
-    <string name="lastposition">"LastPosition: "</string>
+    <string name="cost">Cost: </string>
+    <string name="lastposition">"Last Position: "</string>
 </resources>
