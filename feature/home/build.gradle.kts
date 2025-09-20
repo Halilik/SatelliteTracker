@@ -68,4 +68,6 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation(libs.androidx.junit)
     testImplementation(libs.junit)
+
+    implementation(libs.androidx.constraintlayout.compose)
 }
