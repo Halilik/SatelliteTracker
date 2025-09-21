@@ -25,12 +25,9 @@ fun NavController.navigateToDetail(
 
 fun NavGraphBuilder.detailScreen(
 ) {
-
     composable<DetailRoute> { entry ->
-
         val satelliteId = entry.toRoute<DetailRoute>().categoryId
         val satelliteName = entry.toRoute<DetailRoute>().satelliteName
-
 
         DetailScreenRoot(
             satelliteId,

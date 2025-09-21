@@ -75,7 +75,6 @@ internal fun HomeScreen(
     onQueryChange: (String) -> Unit,
     navigateToDetail: (Int, String) -> Unit,
 ) {
-    var searchText by rememberSaveable { mutableStateOf("") }
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     Box(
@@ -85,7 +84,7 @@ internal fun HomeScreen(
             .background(color = White)
     ) {
         Column {
-            SearchBar(expanded, searchText, onQueryChange)
+            SearchBar(expanded, onQueryChange)
 
             when (satellitesState) {
                 SatellitesState.Loading -> {
@@ -158,7 +157,6 @@ private fun SatelliteListView(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun SearchBar(
     expanded: Boolean,
-    searchText: String,
     onQueryChange: (String) -> Unit
 ) {
     val searchTextLocal = remember { mutableStateOf("") }
@@ -259,7 +257,7 @@ fun setSatelliteActivity(active: String): String {
 
 @Preview(showBackground = true)
 @Composable
-internal fun GreetingPreview() {
+internal fun HomeScreenPreview() {
     SatelliteTrackerTheme {
         HomeScreen(
             SatellitesState.Success(PreviewAndTestData.dummySatellitesList),
